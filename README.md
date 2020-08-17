@@ -7,8 +7,8 @@ Quickly copy or save a list of your [HumbleBundle keys & entitlements](https://w
 
 
 #### Where and why did this start?
-This repository is a continuation of the script that I originally started in my [steam-game-linker](https://github.com/BeevMan/steam-game-linker) project.
-You may find use of that project if trying to match a different list of games to Steam as well.
-I hope to have this extension fully replace the goal of that project (matching my list from Humble to Steam).
+This repository is a continuation of the script that I originally started in my [steam-game-linker](https://github.com/BeevMan/steam-game-linker) project.  
+You may find use of that project if trying to match a different list of games to Steam as well.  
+I hope to have this extension fully replace the goal of that project (matching my list from Humble to Steam).  
 This extension is still being worked on and growing in functionality.  
 Unlike the [original script v0.725](https://github.com/BeevMan/steam-game-linker/blob/master/scripts/hbKeyPgNameLister.js), this will not work in your browsers console.
