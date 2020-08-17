@@ -1,5 +1,5 @@
 # HumbleBundle Keys Clipboard
-Quickly copy or save a list of your [HumbleBundle keys & entitlements](https://www.humblebundle.com/home/keys):
+####Quickly copy or save a list of your [HumbleBundle keys & entitlements](https://www.humblebundle.com/home/keys):
 
 [![Download from Chrome Web Store](https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x58.png 'HumbleBundle Keys Clipboard extension, available in the Chrome Web Store')](https://chrome.google.com/webstore/detail/humblebundle-keys-clipboa/cmepjcombnmfffjpnnnhmagpmdmnbedg?hl=en)
 
