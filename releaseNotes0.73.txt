@@ -1,0 +1,12 @@
+Fetching August monthly choices broke the extension.
+  This is now fixed, HumbleBundle changed the subscription variables naming.
+  I can not guarantee this is working for all choice subscription as I only have the classic plan.  
+  I am hopefull I have implemented a solution for all choice subscriptions. 
+
+Options are now implemented!
+  I will be adding to these options in the future.
+  
+"clipboardWrite" is now an optional permission.
+  If changing your saving option to clipboard you will be prompted to allow the permission.
+  Once the permission is accepted, you should not be prompted of it again.
+  The permission will turn off when switching your saving option to anything other then clipboard.

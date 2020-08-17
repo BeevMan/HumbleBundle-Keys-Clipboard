@@ -1,0 +1,40 @@
+{
+  "name": "HumbleBundle Keys Clipboard",
+  "version": "0.73",
+  "description": "Copies your list of humble bundle keys & choices to clipboard",
+	"manifest_version": 2,
+	"content_security_policy": "default-src 'self'",
+  "content_scripts": [
+   {
+     "matches": ["https://www.humblebundle.com/home/keys*"],
+		 "run_at": "document_idle",
+     "js": [
+			 "hbKeyPgNameScraper.js", 
+			 "FileSaver.js"
+		 ]
+   }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
+  "permissions": [
+	  "storage"
+	],
+  "optional_permissions": [
+	  "clipboardWrite"
+  ],
+  "web_accessible_resources": ["32-clipboard.png"],
+  "icons": {
+    "128": "128-clipboard.png",
+	"48": "48-clipboard.png",
+	"32": "32-clipboard.png",
+	"16": "16-clipboard.png"
+	},
+  "browser_specific_settings": { 
+	"gecko": {
+	  "id": "94df1f6d-b104-4223-9563-d5514b15a3f3"
+	}
+  }
+
+}
