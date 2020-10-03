@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head><title>HumbleBundle Keys Clipboard Options</title></head>
+<body>
+
+<h3 class = "scraperOnly">Keys & Entitlements page scraper enabled</h3>
+
+<div>
+	Saving method:
+	<select id="saving">
+    <option value=".txt">txt file</option>
+    <option value="clip">clipboard</option>
+    <option class = "apiOnly" value = ".json">json file</option>
+    <option hidden value = ".csv">csv file</option>
+	</select>
+</div>
+
+<div>
+  <label>
+		File name:
+			<input type="text" id="fileName" >
+  </label>
+</div>
+
+<div>
+  <label>
+    <input type="checkbox" id="iconButton">
+    Icon as button.
+  </label>
+  <span class = "scraperOnly">
+    <label>
+      <input type="checkbox" id = "fetchChoices" >
+      Fetch Choices(monthlies).
+    </label>
+  </span>
+  <span class="apiOnly">
+    <label>
+      <input type="checkbox" id = "allApiData" >
+        Retrieve all API data.
+    </label>
+  </span>
+</div>
+
+<h4>
+  <label>
+    <input type = "checkbox" id = "APIenable">
+	API call. (retrieves more data of your purchases)
+  </label>
+</h4>
+
+<div class="apiOnly" id="apiFilters">
+  <h4>API data filters</h4>
+
+  <div>
+    Purchase types:
+    <label>
+        <input type="checkbox" id="storefront" >
+        Store front
+    </label>
+    <label>
+        <input type="checkbox" id="bundle" >
+        Bundle
+    </label>
+    <label>
+      <input type="checkbox" id="subscriptioncontent" >
+      Choice (Monthly)
+  </label>
+  </div>
+
+  <div>
+    Downloads:
+    <select id="platform">
+      <option value="windows">Windows</option>
+      <option value="mac">Mac</option>
+      <option value = "linux">Linux</option>
+      <option value = "android">Android</option>
+      <option value = "audio">Audio</option>
+      <option value = "ebook">Ebook</option>
+      <option value = "all">All</option>
+    </select>
+    <label>
+      <input type="checkbox" id="direct" >
+      Direct
+    </label>
+    <label>
+      <input type="checkbox" id="torrent" >
+      Torrent
+    </label>
+  </div>  
+
+  <div>
+    Status:
+    <label>
+      <input type="checkbox" id="unRedeemed" >
+      Unredeemed titles
+    </label>
+    <label>
+      <input type="checkbox" id="redeemed" >
+      Redeemed keys (or gift links)
+    </label>
+  </div>
+
+  <div>
+    Include:
+    <label>
+      <input type="checkbox" id="appID" >
+      SteamAppID
+    </label>
+    <label>
+      <input type="checkbox" id="restrictions" >
+      Region restrictions
+    </label>
+  </div>
+
+  <div hidden>
+    Sort by purchase:
+    <select id="sort">
+      <option value="noSort">No sort</option>
+      <option value="date">date</option>
+      <option value="name">name</option>
+      <option value="price">price</option>
+    </select>
+  </div>
+
+</div>
+
+<script src="options.js"></script>
+</body>
+</html>

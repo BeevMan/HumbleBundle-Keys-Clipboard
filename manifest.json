@@ -1,7 +1,7 @@
 {
   "name": "HumbleBundle Keys Clipboard",
-  "version": "0.73",
-  "description": "Copies your list of humble bundle keys & choices to clipboard",
+  "version": "0.74",
+  "description": "Quickly copy or save a list of your Humble Bundle entitlements & keys",
 	"manifest_version": 2,
 	"content_security_policy": "default-src 'self'",
   "content_scripts": [
@@ -9,13 +9,15 @@
      "matches": ["https://www.humblebundle.com/home/keys*"],
 		 "run_at": "document_idle",
      "js": [
-			 "hbKeyPgNameScraper.js", 
-			 "FileSaver.js"
+			 "scripts/hbKeyPgNameScraper.js",
+			 "scripts/FileSaver.js",
+			 "scripts/universalFuncs.js",
+			 "scripts/APIscript.js"
 		 ]
    }
   ],
   "options_ui": {
-    "page": "options.html",
+    "page": "options/options.html",
     "open_in_tab": false
   },
   "permissions": [
@@ -24,12 +26,12 @@
   "optional_permissions": [
 	  "clipboardWrite"
   ],
-  "web_accessible_resources": ["32-clipboard.png"],
+  "web_accessible_resources": ["icons/32-clipboard.png"],
   "icons": {
-    "128": "128-clipboard.png",
-	"48": "48-clipboard.png",
-	"32": "32-clipboard.png",
-	"16": "16-clipboard.png"
+    "128": "icons/128-clipboard.png",
+	"48": "icons/48-clipboard.png",
+	"32": "icons/32-clipboard.png",
+	"16": "icons/16-clipboard.png"
 	},
   "browser_specific_settings": { 
 	"gecko": {
@@ -38,4 +40,3 @@
   }
 
 }
-
