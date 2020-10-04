@@ -1,0 +1,15 @@
+RELEASE NOTES v0.74
+
+This release brings an entirely different way to gather information of all your purchases!
+The API call found in options can retrieve much more info than the scraper.
+I've added new options/filters to go with the new way :)
+
+Please be careful where you save the file, it can now contain your product keys!
+
+You will probably notice that enabling/disabling some options will hide other options.
+I did this so that only relevant options are shown at the time.  Hopefully it makes it feel more user friendly?
+
+When using the new API call option to retrieve more data, it doesn't get much info on your choice bundles.
+I am considering adding some scraping to go along with the API call for the choices so that they have some more relevant information.
+
+You can now join me on Discord if you have suggestions / comments or just wanna talk about the extension!
