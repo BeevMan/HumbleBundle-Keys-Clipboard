@@ -7,12 +7,12 @@
 
 
 #### How does it work?
-The scraper (original way) works by going through each entry on your keys & entitlements pages.
-While using the scraper you have the option to fetch your choices (monthlies) by retrieving each individual choice url.
+The scraper (original way) works by going through each entry on your keys & entitlements pages.  
+While using the scraper you have the option to fetch your choices (monthlies) by retrieving each individual choice url and filtering to relevant data.  
 
-The API call works by interacting with Humble Bundle's API.
-It will retrieve every purchase on your account and then filter if chosen to do so in options.
-Much more information can be retrieved from the API call!
+The API call works by interacting with Humble Bundle's API.  
+It will retrieve every purchase on your account and then filter if chosen to do so in options.  
+Much more information can be retrieved from the API call!  
 
 
 #### Where and why did this start?
