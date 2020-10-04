@@ -3,7 +3,6 @@ async function apiCall() {
 	if (compatibleOptsCheck(opts) !== true) {
 		return;
 	}
-	console.log("options are compatible");
 
 	const userOrders = await fetch("https://www.humblebundle.com/api/v1/user/order");
 	const orderKeys = await userOrders.json(); 
@@ -20,7 +19,6 @@ async function apiCall() {
 	if(opts.allApiData){
 		// WILL NEED TO ADD A FUNCTION, IT WILL CONVERT FROM JSON TO AN APPLICABLE FORMAT IF SAVING !== ".json" || "clipboard"
 		readySave(JSON.stringify(data, null, 2));
-		console.log("finished!");
 	} else {
 			filterApiData(data, opts);
 	}
@@ -63,7 +61,6 @@ function compatibleOptsCheck (options){
 
 function filterApiData(toFilter, options){
 	let filtered = [];
-	console.log("starting filtering");
 	for(let i=0; i<toFilter.length; i++){
 		if( options[toFilter[i].product.category] ) { 
 			let bundle = {};
@@ -186,7 +183,6 @@ function filterApiData(toFilter, options){
 	}
 	// WILL NEED TO ADD A FUNCTION, IT WILL CONVERT FROM JSON TO AN APPLICABLE FORMAT IF SAVING ISNT ".json" || "clipboard"
 	readySave(JSON.stringify(filtered, null, 2)); 
-	console.log("finished filtering!");
 }
 
 

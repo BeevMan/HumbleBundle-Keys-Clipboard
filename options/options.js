@@ -16,7 +16,7 @@ function hideOrDisplayOpts(){
 	const isApiEnabled = document.getElementById('APIenable').checked;
 	const getAll = document.getElementById('allApiData'); // if getAll.checked is true, apiFilters should be hidden
 	const apiOnly = document.getElementsByClassName('apiOnly'); // only to be shown when isApiEnabled is true
-	const scraperOnly = document.getElementsByClassName("scraperOnly"); //currently only fetchChoices
+	const scraperOnly = document.getElementsByClassName("scraperOnly"); 
 	if (isApiEnabled){
 		Object.keys(apiOnly).forEach(key => apiOnly[key].removeAttribute("hidden"));
 		Object.keys(scraperOnly).forEach(key => scraperOnly[key].setAttribute("hidden", true));
@@ -104,7 +104,6 @@ function restoreOptions(defOpts) {
 	chrome.storage.sync.get(
 		defOpts
 	, function(options) {
-			console.log(options);
 			const opts = Object.keys(options);
 			opts.forEach(function(opt){
 				let curOpt = document.getElementById(opt);
@@ -114,7 +113,7 @@ function restoreOptions(defOpts) {
 						curOpt.value = options[opt];
 					}
 			  })
-		hideOrDisplayOpts(); // should maybe move this function call (if possible) to somewhere else to improve reusability of restoreOptions()
+		hideOrDisplayOpts();
 		});
 }
 
