@@ -11,5 +11,5 @@ After you allow it once you should not be prompted about it again.
 The permission will self remove itself when changing the option to anything but clipboard.   
 	
 ##### Other permission info.  
-[FireFox permissions](https://support.mozilla.org/en-US/kb/permission-request-messages-firefox-extensions)   
+[FireFox](https://support.mozilla.org/en-US/kb/permission-request-messages-firefox-extensions)   
 [Chrome](https://support.google.com/chrome_webstore/answer/186213?hl=en)  
