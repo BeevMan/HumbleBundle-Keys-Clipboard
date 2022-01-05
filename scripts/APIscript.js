@@ -1,20 +1,15 @@
 async function apiCall() {
 	const opts = await getExtOptions( apiOptions );
-	if (compatibleOptsCheck(opts) !== true) {
+	if (!compatibleOptsCheck(opts)) { // at some point I should consider moving optCheck to options.js
 		return;
 	}
 
 	const userOrders = await fetch("https://www.humblebundle.com/api/v1/user/order");
 	const orderKeys = await userOrders.json(); 
-	let orderPromises= [];
-	orderKeys.forEach(order => orderPromises.push(fetch("https://www.humblebundle.com/api/v1/order/" + order.gamekey + "?all_tpkds=true")));
-	
-
+	const orderPromises = orderKeys.map(order => fetch(`https://www.humblebundle.com/api/v1/order/${order.gamekey}?all_tpkds=true`));
+		
 	const responses = await Promise.all( orderPromises); 
-	const data = await Promise.all(responses.map(function (response) {
-		return response.json();
-	}));
-
+	const data = await Promise.all(responses.map((response) => {return response.json()}));
 
 	if(opts.allApiData){
 		// WILL NEED TO ADD A FUNCTION, IT WILL CONVERT FROM JSON TO AN APPLICABLE FORMAT IF SAVING !== ".json" || "clipboard"
@@ -22,7 +17,6 @@ async function apiCall() {
 	} else {
 			filterApiData(data, opts);
 	}
-
 };
 
 
@@ -47,11 +41,10 @@ function compatibleOptsCheck (options){
 	if (options.allApiData){
 		return true;
 	} else {
-		if (options.storefront === false && options.bundle === false && options.subscriptioncontent === false) {
+		if (!options.storefront && !options.bundle && !options.subscriptioncontent) {
 			return alert("Please choose a purchase type in HumbleBundle Keys Clipboard's options.");
 		} else if (options.direct || options.torrent || options.unRedeemed || options.redeemed) {
-			// options should be compatible
-			return true;
+			return true; // options should be compatible
 		} else {
 			return alert("Please choose a download type or title redemption status in HumbleBundle Keys Clipboard's options.");
 		}
