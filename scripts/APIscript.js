@@ -67,49 +67,9 @@ function filterApiData(toFilter, options){
 			} */
 			
 			if(options.direct || options.torrent){
-				for(let j=0; j < filterMe.subproducts.length; j++){
-					const subProduct = filterMe.subproducts[j];
-					for (let n = 0; n < subProduct.downloads.length; n++){
-						const dlPlatform = subProduct.downloads[n].platform;
-						if ( options.platform === "all" || options.platform === dlPlatform ){
-							const curTitle = subProduct.human_name;
-							if(options.direct){
-								let keyPath = [curTitle, "downloads", dlPlatform];
-								if(bundle.hasOwnProperty("redeemed") && bundle.redeemed.hasOwnProperty(curTitle) ){
-									keyPath.unshift("redeemed");
-									bundle = ifNoPropAdd(bundle, keyPath);
-									bundle.redeemed[curTitle].downloads[dlPlatform].direct = subProduct.downloads[n].download_struct[0].url.web;
-								} else if (bundle.hasOwnProperty("unRedeemed") && bundle.unRedeemed.hasOwnProperty(curTitle) ){
-									keyPath.unshift("unRedeemed");
-									bundle = ifNoPropAdd(bundle, keyPath);
-									bundle.unRedeemed[curTitle].downloads[dlPlatform].direct = subProduct.downloads[n].download_struct[0].url.web;
-								} else {
-									keyPath.unshift("other");
-									bundle = ifNoPropAdd(bundle, keyPath);
-									bundle.other[curTitle].downloads[dlPlatform].direct = subProduct.downloads[n].download_struct[0].url.web;
-								}
-							}
-							if (options.torrent){
-								let keyPath = [curTitle, "downloads", dlPlatform];
-								if(bundle.hasOwnProperty("redeemed") && bundle.redeemed.hasOwnProperty(curTitle) ){
-									keyPath.unshift("redeemed");
-									bundle = ifNoPropAdd(bundle, keyPath);
-									bundle.redeemed[curTitle].downloads[dlPlatform].torrent = subProduct.downloads[n].download_struct[0].url.bittorrent;
-								} else if (bundle.hasOwnProperty("unRedeemed") && bundle.unRedeemed.hasOwnProperty(curTitle) ){
-									keyPath.unshift("unRedeemed");
-									bundle = ifNoPropAdd(bundle, keyPath);
-									bundle.unRedeemed[curTitle].downloads[dlPlatform].torrent = subProduct.downloads[n].download_struct[0].url.bittorrent;
-								} else {
-									keyPath.unshift("other");
-									bundle = ifNoPropAdd(bundle, keyPath);
-									bundle.other[curTitle].downloads[dlPlatform].torrent = subProduct.downloads[n].download_struct[0].url.bittorrent;
-								}
-							}
-						}
-					}
-				}
-
+				handleDownloadFiltering(bundle, filterMe, options);
 			}
+
 			if(Object.keys(bundle).length > 0){
 				let namedBundle = {};
 				namedBundle[filterMe.product.human_name] = bundle;
@@ -125,8 +85,8 @@ function filterApiData(toFilter, options){
 function handleStatusFiltering (bundle, filterMe, options) {
 	let redeemedTitles = {};
 	let unRedeemedTitles = {};
-	for (let j=0; j < filterMe.tpkd_dict.all_tpks.length; j++) { 
-		const curTPKS = filterMe.tpkd_dict.all_tpks[j]; // data regarding each game
+	for (let i=0; i < filterMe.tpkd_dict.all_tpks.length; i++) { 
+		const curTPKS = filterMe.tpkd_dict.all_tpks[i]; // data regarding each game
 		const curName = curTPKS.human_name;
 		if (  curTPKS.hasOwnProperty("redeemed_key_val") ){
 			if (options.redeemed){
@@ -170,6 +130,51 @@ function addRestrictions (titlesObj, curName, curTPKS, options) {
 			titlesObj[curName].exclusive_countries = curTPKS.exclusive_countries;
 		} else if (curTPKS.disallowed_countries.length > 0){
 			titlesObj[curName].disallowed_countries = curTPKS.disallowed_countries;
+		}
+	}
+}
+
+
+function handleDownloadFiltering (bundle, filterMe, options) {
+	for(let i=0; i < filterMe.subproducts.length; i++){
+		const subProduct = filterMe.subproducts[i];
+		for (let n = 0; n < subProduct.downloads.length; n++){
+			const dlPlatform = subProduct.downloads[n].platform;
+			if ( options.platform === "all" || options.platform === dlPlatform ){
+				const curTitle = subProduct.human_name;
+				if(options.direct){
+					let keyPath = [curTitle, "downloads", dlPlatform];
+					if(bundle.hasOwnProperty("redeemed") && bundle.redeemed.hasOwnProperty(curTitle) ){
+						keyPath.unshift("redeemed");
+						bundle = ifNoPropAdd(bundle, keyPath);
+						bundle.redeemed[curTitle].downloads[dlPlatform].direct = subProduct.downloads[n].download_struct[0].url.web;
+					} else if (bundle.hasOwnProperty("unRedeemed") && bundle.unRedeemed.hasOwnProperty(curTitle) ){
+						keyPath.unshift("unRedeemed");
+						bundle = ifNoPropAdd(bundle, keyPath);
+						bundle.unRedeemed[curTitle].downloads[dlPlatform].direct = subProduct.downloads[n].download_struct[0].url.web;
+					} else {
+						keyPath.unshift("other");
+						bundle = ifNoPropAdd(bundle, keyPath);
+						bundle.other[curTitle].downloads[dlPlatform].direct = subProduct.downloads[n].download_struct[0].url.web;
+					}
+				}
+				if (options.torrent){
+					let keyPath = [curTitle, "downloads", dlPlatform];
+					if(bundle.hasOwnProperty("redeemed") && bundle.redeemed.hasOwnProperty(curTitle) ){
+						keyPath.unshift("redeemed");
+						bundle = ifNoPropAdd(bundle, keyPath);
+						bundle.redeemed[curTitle].downloads[dlPlatform].torrent = subProduct.downloads[n].download_struct[0].url.bittorrent;
+					} else if (bundle.hasOwnProperty("unRedeemed") && bundle.unRedeemed.hasOwnProperty(curTitle) ){
+						keyPath.unshift("unRedeemed");
+						bundle = ifNoPropAdd(bundle, keyPath);
+						bundle.unRedeemed[curTitle].downloads[dlPlatform].torrent = subProduct.downloads[n].download_struct[0].url.bittorrent;
+					} else {
+						keyPath.unshift("other");
+						bundle = ifNoPropAdd(bundle, keyPath);
+						bundle.other[curTitle].downloads[dlPlatform].torrent = subProduct.downloads[n].download_struct[0].url.bittorrent;
+					}
+				}
+			}
 		}
 	}
 }
