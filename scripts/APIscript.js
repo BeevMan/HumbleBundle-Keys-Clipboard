@@ -46,7 +46,7 @@ function compatibleOptsCheck (options){
 		} else if (options.direct || options.torrent || options.unRedeemed || options.redeemed) {
 			return true; // options should be compatible
 		} else {
-			return alert("Please choose a download type or title redemption status in HumbleBundle Keys Clipboard's options.");
+			return alert("Please choose a title redemption status and or download type in HumbleBundle Keys Clipboard's options.");
 		}
 	}
 }
@@ -61,58 +61,33 @@ function filterApiData(toFilter, options){
 				let redeemedTitles = {};
 				let unRedeemedTitles = {};
 				for (let j=0; j < toFilter[i].tpkd_dict.all_tpks.length; j++) { 
-					const curTPKS = toFilter[i].tpkd_dict.all_tpks[j];
+					const curTPKS = toFilter[i].tpkd_dict.all_tpks[j]; // data regarding each game
 					const curName = curTPKS.human_name;
-					if (  curTPKS.hasOwnProperty("redeemed_key_val") ){	
+					if (  curTPKS.hasOwnProperty("redeemed_key_val") ){
 						if (options.redeemed){
 							redeemedTitles[curName] = {};
 							redeemedTitles[curName].key = curTPKS.redeemed_key_val;
-							if(options.appID && curTPKS.steam_app_id !== null){
-								redeemedTitles[curName].SteamAppID = curTPKS.steam_app_id;
-							}
-							if(options.restrictions){
-								if( curTPKS.exclusive_countries.length > 0 ){
-									redeemedTitles[curName].exclusive_countries = curTPKS.exclusive_countries;
-								} else if (curTPKS.disallowed_countries.length > 0){
-									redeemedTitles[curName].disallowed_countries = curTPKS.disallowed_countries;
-								}
-							}
+							addAppID(redeemedTitles, curName, curTPKS, options);
+							addRestrictions(redeemedTitles, curName, curTPKS, options);
 						}
-					} else if (curTPKS.length === 0 && toFilter[i].subproducts[0].library_family_name === "hidden" || curTPKS.is_expired){
+					} else if (curTPKS.length === 0 && toFilter[i].subproducts[0].library_family_name === "hidden" || curTPKS.is_expired){ // some "expired keys" only have the "hidden" name and still contain the key. Length check discludes them from here
 						if (options.redeemed){
-							redeemedTitles[curName] = {};
-							redeemedTitles[curName].key = "Expired"
-							if(options.appID && curTPKS.steam_app_id !== null){
-								redeemedTitles[curName].SteamAppID = curTPKS.steam_app_id;
-							}
-							if(options.restrictions){
-								if( curTPKS.exclusive_countries.length > 0 ){
-									redeemedTitles[curName].exclusive_countries = curTPKS.exclusive_countries;
-								} else if (curTPKS.disallowed_countries.length > 0){
-									redeemedTitles[curName].disallowed_countries = curTPKS.disallowed_countries;
-								}
-							}
+							redeemedTitles[curName] = {};	
+							redeemedTitles[curName].key = "Expired";
+							addAppID(redeemedTitles, curName, curTPKS, options);
+							addRestrictions(redeemedTitles, curName, curTPKS, options);
 						}
 					} else if (options.unRedeemed){
 						unRedeemedTitles[curName] = {};
-						if(options.appID && curTPKS.steam_app_id !== null){
-							unRedeemedTitles[curName].SteamAppID = curTPKS.steam_app_id;
-						}
-						if(options.restrictions){
-							if( curTPKS.exclusive_countries.length > 0 ){
-								unRedeemedTitles[curName].exclusive_countries = curTPKS.exclusive_countries;
-							} else if (curTPKS.disallowed_countries.length > 0){
-								unRedeemedTitles[curName].disallowed_countries = curTPKS.disallowed_countries;
-							}
-						}
+						addAppID(unRedeemedTitles, curName, curTPKS, options);
+						addRestrictions(unRedeemedTitles, curName, curTPKS, options);
 					}
 					if (Object.keys(redeemedTitles).length > 0){
 						bundle.redeemed = redeemedTitles;
 					}
 					if (Object.keys(unRedeemedTitles).length > 0){
 						bundle.unRedeemed = unRedeemedTitles;
-					}
-					
+					}	
 				}
 			}
 			/*
@@ -169,13 +144,28 @@ function filterApiData(toFilter, options){
 				namedBundle[toFilter[i].product.human_name] = bundle;
 				filtered.push(namedBundle);
 			}
-		} else {
-			toFilter.splice(i,1);
-			--i;
 		}
 	}
 	// WILL NEED TO ADD A FUNCTION, IT WILL CONVERT FROM JSON TO AN APPLICABLE FORMAT IF SAVING ISNT ".json" || "clipboard"
 	readySave(JSON.stringify(filtered, null, 2)); 
+}
+
+
+function addAppID (titlesObj, curName, curTPKS, options) {
+	if(options.appID && curTPKS.steam_app_id !== null){
+		titlesObj[curName].SteamAppID = curTPKS.steam_app_id;
+	}
+}
+
+
+function addRestrictions (titlesObj, curName, curTPKS, options) {
+	if(options.restrictions) {
+		if( curTPKS.exclusive_countries.length > 0 ){
+			titlesObj[curName].exclusive_countries = curTPKS.exclusive_countries;
+		} else if (curTPKS.disallowed_countries.length > 0){
+			titlesObj[curName].disallowed_countries = curTPKS.disallowed_countries;
+		}
+	}
 }
 
 
