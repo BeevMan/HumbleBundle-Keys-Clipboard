@@ -55,49 +55,20 @@ function compatibleOptsCheck (options){
 function filterApiData(toFilter, options){
 	let filtered = [];
 	for(let i=0; i<toFilter.length; i++){
-		if( options[toFilter[i].product.category] ) { 
+		const filterMe = toFilter[i];
+		if( options[filterMe.product.category] ) { 
 			let bundle = {};
 			if(options.unRedeemed || options.redeemed){
-				let redeemedTitles = {};
-				let unRedeemedTitles = {};
-				for (let j=0; j < toFilter[i].tpkd_dict.all_tpks.length; j++) { 
-					const curTPKS = toFilter[i].tpkd_dict.all_tpks[j]; // data regarding each game
-					const curName = curTPKS.human_name;
-					if (  curTPKS.hasOwnProperty("redeemed_key_val") ){
-						if (options.redeemed){
-							redeemedTitles[curName] = {};
-							redeemedTitles[curName].key = curTPKS.redeemed_key_val;
-							addAppID(redeemedTitles, curName, curTPKS, options);
-							addRestrictions(redeemedTitles, curName, curTPKS, options);
-						}
-					} else if (curTPKS.length === 0 && toFilter[i].subproducts[0].library_family_name === "hidden" || curTPKS.is_expired){ // some "expired keys" only have the "hidden" name and still contain the key. Length check discludes them from here
-						if (options.redeemed){
-							redeemedTitles[curName] = {};	
-							redeemedTitles[curName].key = "Expired";
-							addAppID(redeemedTitles, curName, curTPKS, options);
-							addRestrictions(redeemedTitles, curName, curTPKS, options);
-						}
-					} else if (options.unRedeemed){
-						unRedeemedTitles[curName] = {};
-						addAppID(unRedeemedTitles, curName, curTPKS, options);
-						addRestrictions(unRedeemedTitles, curName, curTPKS, options);
-					}
-					if (Object.keys(redeemedTitles).length > 0){
-						bundle.redeemed = redeemedTitles;
-					}
-					if (Object.keys(unRedeemedTitles).length > 0){
-						bundle.unRedeemed = unRedeemedTitles;
-					}	
-				}
+				handleStatusFiltering(bundle, filterMe, options);
 			}
 			/*
-			if( toFilter[i].product.human_name.endsWith("Choice") ){ // I will need to modify my current scraper to do this or build a new.  Choices currently only return redeemed keys and games included with the choice (that don't require using a choice)
-
+			if( filterMe.product.human_name.endsWith("Choice") ){ // I will need to modify my current scraper to do this or build a new.  Choices currently only return redeemed keys and games included with the choice (that don't require using a choice)
+				// should gather data like, choices remaining of total choices, remaining choice titles & their appId & restrictions if applicable
 			} */
 			
 			if(options.direct || options.torrent){
-				for(let j=0; j < toFilter[i].subproducts.length; j++){
-					const subProduct = toFilter[i].subproducts[j];
+				for(let j=0; j < filterMe.subproducts.length; j++){
+					const subProduct = filterMe.subproducts[j];
 					for (let n = 0; n < subProduct.downloads.length; n++){
 						const dlPlatform = subProduct.downloads[n].platform;
 						if ( options.platform === "all" || options.platform === dlPlatform ){
@@ -141,13 +112,48 @@ function filterApiData(toFilter, options){
 			}
 			if(Object.keys(bundle).length > 0){
 				let namedBundle = {};
-				namedBundle[toFilter[i].product.human_name] = bundle;
+				namedBundle[filterMe.product.human_name] = bundle;
 				filtered.push(namedBundle);
 			}
 		}
 	}
 	// WILL NEED TO ADD A FUNCTION, IT WILL CONVERT FROM JSON TO AN APPLICABLE FORMAT IF SAVING ISNT ".json" || "clipboard"
 	readySave(JSON.stringify(filtered, null, 2)); 
+}
+
+
+function handleStatusFiltering (bundle, filterMe, options) {
+	let redeemedTitles = {};
+	let unRedeemedTitles = {};
+	for (let j=0; j < filterMe.tpkd_dict.all_tpks.length; j++) { 
+		const curTPKS = filterMe.tpkd_dict.all_tpks[j]; // data regarding each game
+		const curName = curTPKS.human_name;
+		if (  curTPKS.hasOwnProperty("redeemed_key_val") ){
+			if (options.redeemed){
+				redeemedTitles[curName] = {};
+				redeemedTitles[curName].key = curTPKS.redeemed_key_val;
+				addAppID(redeemedTitles, curName, curTPKS, options);
+				addRestrictions(redeemedTitles, curName, curTPKS, options);
+			}
+		} else if (curTPKS.length === 0 && filterMe.subproducts[0].library_family_name === "hidden" || curTPKS.is_expired){ // some "expired keys" only have the "hidden" name and still contain the key. Length check discludes them from here
+			if (options.redeemed){
+				redeemedTitles[curName] = {};	
+				redeemedTitles[curName].key = "Expired";
+				addAppID(redeemedTitles, curName, curTPKS, options);
+				addRestrictions(redeemedTitles, curName, curTPKS, options);
+			}
+		} else if (options.unRedeemed){
+			unRedeemedTitles[curName] = {};
+			addAppID(unRedeemedTitles, curName, curTPKS, options);
+			addRestrictions(unRedeemedTitles, curName, curTPKS, options);
+		}
+		if (Object.keys(redeemedTitles).length > 0){
+			bundle.redeemed = redeemedTitles;
+		}
+		if (Object.keys(unRedeemedTitles).length > 0){
+			bundle.unRedeemed = unRedeemedTitles;
+		}	
+	}
 }
 
 
