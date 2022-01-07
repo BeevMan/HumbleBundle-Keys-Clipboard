@@ -92,19 +92,19 @@ function handleStatusFiltering (bundle, filterMe, options) {
 			if (options.redeemed){
 				redeemedTitles[curName] = {};
 				redeemedTitles[curName].key = curTPKS.redeemed_key_val;
-				addAppID(redeemedTitles, curName, curTPKS, options);
+				addAppID(redeemedTitles[curName], curTPKS, options);
 				addRestrictions(redeemedTitles, curName, curTPKS, options);
 			}
 		} else if (curTPKS.length === 0 && filterMe.subproducts[0].library_family_name === "hidden" || curTPKS.is_expired){ // some "expired keys" only have the "hidden" name and still contain the key. Length check discludes them from here
 			if (options.redeemed){
 				redeemedTitles[curName] = {};	
 				redeemedTitles[curName].key = "Expired";
-				addAppID(redeemedTitles, curName, curTPKS, options);
+				addAppID(redeemedTitles[curName], curTPKS, options);
 				addRestrictions(redeemedTitles, curName, curTPKS, options);
 			}
 		} else if (options.unRedeemed){
 			unRedeemedTitles[curName] = {};
-			addAppID(unRedeemedTitles, curName, curTPKS, options);
+			addAppID(unRedeemedTitles[curName], curTPKS, options);
 			addRestrictions(unRedeemedTitles, curName, curTPKS, options);
 		}
 		if (Object.keys(redeemedTitles).length > 0){
@@ -117,9 +117,9 @@ function handleStatusFiltering (bundle, filterMe, options) {
 }
 
 
-function addAppID (titlesObj, curName, curTPKS, options) {
+function addAppID (gamesObj, curTPKS, options) {
 	if(options.appID && curTPKS.steam_app_id !== null){
-		titlesObj[curName].SteamAppID = curTPKS.steam_app_id;
+		gamesObj.SteamAppID = curTPKS.steam_app_id;
 	}
 }
 
