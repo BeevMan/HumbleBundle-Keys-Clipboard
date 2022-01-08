@@ -62,7 +62,7 @@ function filterApiData(toFilter, options){
 				handleStatusFiltering(bundle, filterMe, options);
 			}
 			/*
-			if( filterMe.product.human_name.endsWith("Choice") ){ // I will need to modify my current scraper to do this or build a new.  Choices currently only return redeemed keys and games included with the choice (that don't require using a choice)
+			if( filterMe.product.choice_url ) ){ // I will need to modify my current scraper to do this or build a new.  Choices currently only return redeemed keys and games included with the choice (that don't require using a choice)
 				// should gather data like, choices remaining of total choices, remaining choice titles & their appId & restrictions if applicable
 			} */
 			
@@ -71,9 +71,7 @@ function filterApiData(toFilter, options){
 			}
 
 			if(Object.keys(bundle).length > 0){
-				let namedBundle = {};
-				namedBundle[filterMe.product.human_name] = bundle;
-				filtered.push(namedBundle);
+				filtered.push( { [filterMe.product.human_name]:[bundle] } );
 			}
 		}
 	}
