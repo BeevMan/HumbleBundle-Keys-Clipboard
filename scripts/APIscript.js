@@ -52,19 +52,18 @@ function compatibleOptsCheck (options){
 }
 
 
-function filterApiData(toFilter, options){
+async function filterApiData(toFilter, options){
 	let filtered = [];
 	for(let i=0; i<toFilter.length; i++){
 		const filterMe = toFilter[i];
 		if( options[filterMe.product.category] ) { 
-			let bundle = {};
+			let bundle = {}; 
 			if(options.unRedeemed || options.redeemed){
 				handleStatusFiltering(bundle, filterMe, options);
 			}
-			/*
-			if( filterMe.product.choice_url ) ){ // I will need to modify my current scraper to do this or build a new.  Choices currently only return redeemed keys and games included with the choice (that don't require using a choice)
-				// should gather data like, choices remaining of total choices, remaining choice titles & their appId & restrictions if applicable
-			} */
+			if( filterMe.product.choice_url ) {
+				await handleChoiceData(bundle, filterMe.product.choice_url, options);
+			}
 			
 			if(options.direct || options.torrent){
 				handleDownloadFiltering(bundle, filterMe, options);
@@ -91,26 +90,26 @@ function handleStatusFiltering (bundle, filterMe, options) {
 				redeemedTitles[curName] = {};
 				redeemedTitles[curName].key = curTPKS.redeemed_key_val;
 				addAppID(redeemedTitles[curName], curTPKS, options);
-				addRestrictions(redeemedTitles, curName, curTPKS, options);
+				addRestrictions(redeemedTitles[curName], curTPKS, options);
 			}
 		} else if (curTPKS.length === 0 && filterMe.subproducts[0].library_family_name === "hidden" || curTPKS.is_expired){ // some "expired keys" only have the "hidden" name and still contain the key. Length check discludes them from here
 			if (options.redeemed){
 				redeemedTitles[curName] = {};	
 				redeemedTitles[curName].key = "Expired";
 				addAppID(redeemedTitles[curName], curTPKS, options);
-				addRestrictions(redeemedTitles, curName, curTPKS, options);
+				addRestrictions(redeemedTitles[curName], curTPKS, options);
 			}
 		} else if (options.unRedeemed){
 			unRedeemedTitles[curName] = {};
 			addAppID(unRedeemedTitles[curName], curTPKS, options);
-			addRestrictions(unRedeemedTitles, curName, curTPKS, options);
+			addRestrictions(unRedeemedTitles[curName], curTPKS, options);
 		}
 		if (Object.keys(redeemedTitles).length > 0){
 			bundle.redeemed = redeemedTitles;
 		}
 		if (Object.keys(unRedeemedTitles).length > 0){
 			bundle.unRedeemed = unRedeemedTitles;
-		}	
+		}
 	}
 }
 
@@ -122,14 +121,73 @@ function addAppID (gamesObj, curTPKS, options) {
 }
 
 
-function addRestrictions (titlesObj, curName, curTPKS, options) {
+function addRestrictions (gamesObj, curTPKS, options) {
 	if(options.restrictions) {
 		if( curTPKS.exclusive_countries.length > 0 ){
-			titlesObj[curName].exclusive_countries = curTPKS.exclusive_countries;
+			gamesObj.exclusive_countries = curTPKS.exclusive_countries;
 		} else if (curTPKS.disallowed_countries.length > 0){
-			titlesObj[curName].disallowed_countries = curTPKS.disallowed_countries;
+			gamesObj.disallowed_countries = curTPKS.disallowed_countries;
 		}
 	}
+}
+
+
+async function handleChoiceData (bundle, choice_url, options) {
+
+	const url = `https://www.humblebundle.com/subscription/${choice_url}`;
+	const response = await fetch(url);
+	const textPromise = await response.text();
+
+	const parser = new DOMParser();
+	const doc = parser.parseFromString( textPromise, 'text/html');
+
+	const monthlyData = await JSON.parse(doc.getElementById("webpack-monthly-product-data").innerText).contentChoiceOptions;
+
+	bundle.maxChoices = monthlyData.MAX_CHOICES; // amount of choices available according to purchase plan???  Does not go past 10? even if they let you redeem all 12 games that month.
+
+
+	let initPath = "initial";
+	if (monthlyData.contentChoiceData["initial-get-all-games"]) {
+		initPath = "initial-get-all-games";
+		bundle.maxChoices = Object.keys(monthlyData.contentChoiceData[initPath].content_choices).length
+	}
+
+	let choicesMade = [];
+	if (monthlyData.contentChoicesMade) {
+		choicesMade = monthlyData.contentChoicesMade[initPath].choices_made; // array of machine names of game/s that have been redeemed by using choices
+		bundle.choicesUsed = choicesMade.length;
+	} else {
+		bundle.choicesUsed = 0;
+	}
+
+	const allChoices =  monthlyData.contentChoiceData[initPath].content_choices; // all choices for that month
+	let choicesLeft = [];
+	for (const choice in allChoices ) {
+		if (!choicesMade.includes(allChoices[choice].display_item_machine_name)) {
+			choicesLeft.push(allChoices[choice])
+		}
+	}
+
+	let choices = {};
+	choicesLeft.map( (choice) => {
+		choices[choice.title] = {};
+
+		let choiceTpkds = [];
+		if (choice.tpkds) {
+			choiceTpkds = choice.tpkds[0];
+		} else {
+			if (choice.nested_choice_tpkds) {
+				if (choice.nested_choice_tpkds[`${choice.display_item_machine_name}_steam`]){
+					choiceTpkds = choice.nested_choice_tpkds[`${choice.display_item_machine_name}_steam`][0];
+				}
+			}
+		}
+
+		addAppID( choices[choice.title], choiceTpkds, options );
+		addRestrictions( choices[choice.title], choiceTpkds, options );
+	});
+	
+	bundle.unMadeChoices = choices;
 }
 
 
