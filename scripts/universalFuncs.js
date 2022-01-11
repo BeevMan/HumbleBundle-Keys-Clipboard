@@ -60,9 +60,16 @@ async function addButton(){
 	}
 	let btn = document.createElement("label");
 	if (icon === undefined) {
-		btn.innerHTML = '<button type="button">List to clipboard.</button>'
+		let button = document.createElement("button");
+		button.type = "button";
+		button.innerText = "List to clipboard.";
+		btn.appendChild(button);
 	} else {
-		btn.innerHTML = '<input type="image" src=" '+ icon +' " alt="List to clipboard." >' ;
+		let inpt = document.createElement("input");
+		inpt.type = "image";
+		inpt.src = `${icon}`;
+		inpt.alt = "List to clipboard."
+		btn.appendChild(inpt);
 	}
 	if (options.APIenable === true){
 		btn.addEventListener("click", apiCall);
