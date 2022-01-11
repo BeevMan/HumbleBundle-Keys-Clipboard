@@ -78,7 +78,6 @@ function extPermission(method, permission) {
 };
 
 
-
 const defOptions = {
 	APIenable: false,
 	saving: '.txt',
@@ -96,6 +95,7 @@ const defOptions = {
 	redeemed: false,
 	appID: false,
 	restrictions: false,
+	addlChoice: false,
 	sort: 'noSort',
 };
 

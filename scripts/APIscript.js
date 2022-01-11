@@ -33,6 +33,7 @@ const apiOptions = {
 	redeemed: false,
 	appID: false,
 	restrictions: false,
+	addlChoice: false,
 	sort: 'noSort',
 };
 
@@ -61,7 +62,7 @@ async function filterApiData(toFilter, options){
 			if(options.unRedeemed || options.redeemed){
 				handleStatusFiltering(bundle, filterMe, options);
 			}
-			if( filterMe.product.choice_url ) {
+			if(options.addlChoice && filterMe.product.choice_url ) {
 				await handleChoiceData(bundle, filterMe.product.choice_url, options);
 			}
 			
@@ -70,7 +71,7 @@ async function filterApiData(toFilter, options){
 			}
 
 			if(Object.keys(bundle).length > 0){
-				filtered.push( { [filterMe.product.human_name]:[bundle] } );
+				filtered.push( { [filterMe.product.human_name]:bundle } );
 			}
 		}
 	}
