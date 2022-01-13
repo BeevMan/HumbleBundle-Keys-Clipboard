@@ -164,7 +164,7 @@ async function handleChoiceData (bundle, choice_url, options) {
 	const allChoices =  monthlyData.contentChoiceData[initPath].content_choices; // all choices for that month
 	let choicesLeft = [];
 	for (const choice in allChoices ) {
-		if (!choicesMade.includes(allChoices[choice].display_item_machine_name)) {
+		if (!choicesMade.includes(choice)) {
 			choicesLeft.push(allChoices[choice])
 		}
 	}
