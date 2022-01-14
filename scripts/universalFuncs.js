@@ -6,7 +6,7 @@ function clipboard(toCopy){
 			alert("Could not copy list to clipboard.");
 		});
 	} else {
-		let dummy = document.createElement("textarea");
+		const dummy = document.createElement("textarea");
 		document.body.appendChild(dummy);
 		dummy.value = toCopy;
 		dummy.select();
@@ -23,10 +23,10 @@ async function readySave(toSave) {
 	if(opts.saving === "clip"){
 		clipboard(toSave)
 	} else if (opts.APIenable === false){
-		let blob = new Blob([toSave], {type: "text/plain;charset=utf-8"});
+		const blob = new Blob([toSave], {type: "text/plain;charset=utf-8"});
 		saveAs(blob, opts.fileName + ".text");
 	} else {
-		let blob = new Blob([toSave], {type: "text/plain;charset=utf-8"});
+		const blob = new Blob([toSave], {type: "text/plain;charset=utf-8"});
 		saveAs(blob, opts.fileName + opts.saving);
 	};
 };
@@ -46,7 +46,7 @@ function getExtOptions(key) {
 };
 
 
-async function addButton(){
+(async function (){ // function addButton
 	const options = await getExtOptions( {iconButton: true, APIenable: false} );
 	const buttOpt = options.iconButton ?? true;
 	let icon;
@@ -60,12 +60,12 @@ async function addButton(){
 	}
 	let btn = document.createElement("label");
 	if (icon === undefined) {
-		let button = document.createElement("button");
+		const button = document.createElement("button");
 		button.type = "button";
 		button.innerText = "List to clipboard.";
 		btn.appendChild(button);
 	} else {
-		let inpt = document.createElement("input");
+		const inpt = document.createElement("input");
 		inpt.type = "image";
 		inpt.src = `${icon}`;
 		inpt.alt = "List to clipboard."
@@ -77,6 +77,4 @@ async function addButton(){
 	    btn.addEventListener("click", copyList);
 	}
 	document.getElementsByClassName("sort")[0].appendChild(btn);
-};
-
-addButton();
+})();
