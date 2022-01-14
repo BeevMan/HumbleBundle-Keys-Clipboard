@@ -157,6 +157,7 @@ async function handleChoiceData (bundle, choice_url, options) {
 	if (monthlyData.contentChoicesMade) {
 		choicesMade = monthlyData.contentChoicesMade[initPath].choices_made; // array of machine names of game/s that have been redeemed by using choices
 		bundle.choicesUsed = choicesMade.length;
+		// The object that "choice_url" comes from also contains "choices_remaining", which could be used to output said data.
 	} else {
 		bundle.choicesUsed = 0;
 	}
@@ -200,21 +201,23 @@ function handleDownloadFiltering (bundle, filterMe, options) {
 			if ( options.platform === "all" || options.platform === dlPlatform ){
 				const curTitle = subProduct.human_name;
 				if(options.direct){
+					const dlLink = subProduct.downloads[n].download_struct[0].url.web;
 					if(bundle.hasOwnProperty("redeemed") && bundle.redeemed.hasOwnProperty(curTitle) ){
-						addDownloads(bundle, subProduct, dlPlatform, n, curTitle, "redeemed");
+						addDownloads(bundle, dlLink, dlPlatform, curTitle, "redeemed", "direct");
 					} else if (bundle.hasOwnProperty("unRedeemed") && bundle.unRedeemed.hasOwnProperty(curTitle) ){
-						addDownloads(bundle, subProduct, dlPlatform, n, curTitle, "unRedeemed");
+						addDownloads(bundle, dlLink, dlPlatform, curTitle, "unRedeemed", "direct");
 					} else {
-						addDownloads(bundle, subProduct, dlPlatform, n, curTitle, "other");
+						addDownloads(bundle, dlLink, dlPlatform, curTitle, "other", "direct");
 					}
 				}
 				if (options.torrent){
+					const dlLink = subProduct.downloads[n].download_struct[0].url.bittorrent;
 					if(bundle.hasOwnProperty("redeemed") && bundle.redeemed.hasOwnProperty(curTitle) ){
-						addDownloads(bundle, subProduct, dlPlatform, n, curTitle, "redeemed");
+						addDownloads(bundle, dlLink, dlPlatform, curTitle, "redeemed", "torrent");
 					} else if (bundle.hasOwnProperty("unRedeemed") && bundle.unRedeemed.hasOwnProperty(curTitle) ){
-						addDownloads(bundle, subProduct, dlPlatform, n, curTitle, "unRedeemed");
+						addDownloads(bundle, dlLink, dlPlatform, curTitle, "unRedeemed", "torrent");
 					} else {
-						addDownloads(bundle, subProduct, dlPlatform, n, curTitle, "other");
+						addDownloads(bundle, dlLink, dlPlatform, curTitle, "other", "torrent");
 					}
 				}
 			}
@@ -223,26 +226,21 @@ function handleDownloadFiltering (bundle, filterMe, options) {
 }
 
 
-function addDownloads (bundle, subProduct, dlPlatform, i, curTitle, redemption) {
+function addDownloads (bundle, dlLink, dlPlatform, curTitle, redemption, path) {
 	let keyPath = [curTitle, "downloads", dlPlatform];
 
 	keyPath.unshift(redemption);
-	bundle = ifNoPropAdd(bundle, keyPath);
-	bundle[redemption][curTitle].downloads[dlPlatform].direct = subProduct.downloads[i].download_struct[0].url.web;
+	addProp(bundle, keyPath);
+	bundle[redemption][curTitle].downloads[dlPlatform][path] = dlLink;
 }
 
 
-function ifNoPropAdd(objToCheck, checkAdd){
-	for(let i=0; i< checkAdd.length; i++){
-		if(objToCheck.hasOwnProperty(checkAdd[0]) === false){
-			objToCheck[checkAdd[0]] = {};
-		} else if (objToCheck[checkAdd[0]].hasOwnProperty(checkAdd[1]) === false ){
-			objToCheck[checkAdd[0]][checkAdd[1]] = {};
-		} else if (objToCheck[checkAdd[0]][checkAdd[1]].hasOwnProperty(checkAdd[2]) === false){
-			objToCheck[checkAdd[0]][checkAdd[1]][checkAdd[2]] = {};
-		} else if (objToCheck[checkAdd[0]][checkAdd[1]][checkAdd[2]].hasOwnProperty(checkAdd[3]) === false){
-			objToCheck[checkAdd[0]][checkAdd[1]][checkAdd[2]][checkAdd[3]] = {};
-		}
+function addProp(objToCheck, checkAdd) {
+	if(objToCheck.hasOwnProperty(checkAdd[0]) === false){
+		objToCheck[checkAdd[0]] = {};
 	}
-	return objToCheck;
+	if(checkAdd.length > 1) {
+		const removed = checkAdd.shift();
+		addProp(objToCheck[removed], checkAdd);
+	}
 }
