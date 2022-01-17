@@ -32,10 +32,10 @@ async function copyList(){
 				if (opts.fetchChoices !== false) {
 					const tempInfo = descriptions[i+1].innerText.split("\n",2);
 					tempInfo[1] = tempInfo[1].slice(9);
-					monthlyInfo.push(`${tempInfo[0]}  \n${tempInfo[1]}`);
+					monthlyInfo.push(`${tempInfo[0]}\n${tempInfo[1]}`);
 				}
 			} else {
-			    strGames += `${elH4[i].innerHTML}  \n`;
+			    strGames += `${elH4[i].innerHTML}\n`;
 			}
 		};
 		if (j < intPageCount -1){
@@ -82,12 +82,12 @@ async function fetchMonthlies(urls,strGames,monthlyInfo) {
 			};
 		}
 		
-		strGames += `  \n${monthlyInfo[index]}  \n`;
+		strGames += `\n${monthlyInfo[index]}\n`;
 		const choiceKeys = Object.keys(choiceData);
 
 		for (let i = 0; i < choiceKeys.length; i++){
 			const curKey = choiceKeys[i];
-			strGames += `${choiceData[curKey].title}  \n`;
+			strGames += `${choiceData[curKey].title}\n`;
 		};
 		index++;
 	}

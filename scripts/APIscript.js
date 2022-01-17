@@ -54,7 +54,7 @@ function compatibleOptsCheck (options){
 
 
 async function filterApiData(toFilter, options){
-	let filtered = [];
+	const filtered = [];
 	for(let i=0; i<toFilter.length; i++){
 		const filterMe = toFilter[i];
 		if( options[filterMe.product.category] ) { 
@@ -163,7 +163,7 @@ async function handleChoiceData (bundle, choice_url, options) {
 	}
 
 	const allChoices =  monthlyData.contentChoiceData[initPath].content_choices; // all choices for that month
-	let choicesLeft = [];
+	const choicesLeft = [];
 	for (const choice in allChoices ) {
 		if (!choicesMade.includes(choice)) {
 			choicesLeft.push(allChoices[choice])
@@ -202,23 +202,11 @@ function handleDownloadFiltering (bundle, filterMe, options) {
 				const curTitle = subProduct.human_name;
 				if(options.direct){
 					const dlLink = subProduct.downloads[n].download_struct[0].url.web;
-					if(bundle.hasOwnProperty("redeemed") && bundle.redeemed.hasOwnProperty(curTitle) ){
-						addDownloads(bundle, dlLink, dlPlatform, curTitle, "redeemed", "direct");
-					} else if (bundle.hasOwnProperty("unRedeemed") && bundle.unRedeemed.hasOwnProperty(curTitle) ){
-						addDownloads(bundle, dlLink, dlPlatform, curTitle, "unRedeemed", "direct");
-					} else {
-						addDownloads(bundle, dlLink, dlPlatform, curTitle, "other", "direct");
-					}
+					addDownloads(bundle, dlLink, dlPlatform, curTitle, "direct");
 				}
 				if (options.torrent){
 					const dlLink = subProduct.downloads[n].download_struct[0].url.bittorrent;
-					if(bundle.hasOwnProperty("redeemed") && bundle.redeemed.hasOwnProperty(curTitle) ){
-						addDownloads(bundle, dlLink, dlPlatform, curTitle, "redeemed", "torrent");
-					} else if (bundle.hasOwnProperty("unRedeemed") && bundle.unRedeemed.hasOwnProperty(curTitle) ){
-						addDownloads(bundle, dlLink, dlPlatform, curTitle, "unRedeemed", "torrent");
-					} else {
-						addDownloads(bundle, dlLink, dlPlatform, curTitle, "other", "torrent");
-					}
+					addDownloads(bundle, dlLink, dlPlatform, curTitle, "torrent");
 				}
 			}
 		}
@@ -226,10 +214,20 @@ function handleDownloadFiltering (bundle, filterMe, options) {
 }
 
 
-function addDownloads (bundle, dlLink, dlPlatform, curTitle, redemption, path) {
-	let keyPath = [curTitle, "downloads", dlPlatform];
+function getRedemptiontatus (bundle, curTitle) {
+	if(bundle.hasOwnProperty("redeemed") && bundle.redeemed.hasOwnProperty(curTitle) ){
+		return "redeemed"
+	} else if (bundle.hasOwnProperty("unRedeemed") && bundle.unRedeemed.hasOwnProperty(curTitle) ){
+		return "unRedeemed"
+	} else {
+		return "other"
+	}
+}
 
-	keyPath.unshift(redemption);
+
+function addDownloads (bundle, dlLink, dlPlatform, curTitle, path) {
+	const redemption = getRedemptiontatus(bundle, curTitle);
+	const keyPath = [redemption, curTitle, "downloads", dlPlatform];
 	addProp(bundle, keyPath);
 	bundle[redemption][curTitle].downloads[dlPlatform][path] = dlLink;
 }

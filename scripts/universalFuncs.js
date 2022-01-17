@@ -58,7 +58,7 @@ function getExtOptions(key) {
 			icon = "moz-extension://<extension-UUID>/32-clipboard.png";
 		};
 	}
-	let btn = document.createElement("label");
+	const btn = document.createElement("label");
 	if (icon === undefined) {
 		const button = document.createElement("button");
 		button.type = "button";
