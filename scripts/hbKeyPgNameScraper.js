@@ -36,7 +36,7 @@ async function copyList(){
 					monthlyInfo.push(tempInfo);
 				}
 			} else {
-			    strGames += elH4[i].innerHTML + "\n";
+			    strGames += elH4[i].innerHTML + "  \n";
 			}
 		};
 		if (j < intPageCount -1){
@@ -54,33 +54,27 @@ async function copyList(){
 
 async function fetchMonthlies(urls,strGames,monthlyInfo) {
 
-  const textPromises = urls.map(async url => {
+	const promises = urls.map(async url => {
 		const response = await fetch(url);
 		return response.text();
 	});
   
-  
-	let loopInt = 0;
-	for (const textPromise of textPromises) {
+	let index = 0;
+	for(const promise of promises) {
 		const parser = new DOMParser();
-		const doc = parser.parseFromString(await textPromise, 'text/html');
+		const doc = parser.parseFromString(await promise, 'text/html');
 		
 		
-		const monthlyData = JSON.parse(doc.getElementById("webpack-monthly-product-data").innerText).contentChoiceOptions;
-		let choicePlan = Object.keys(monthlyData.contentChoiceData)[0];
-		if (choicePlan.startsWith('initial') === false) {
-			const ccdKeys = Object.keys(monthlyData.contentChoiceData);
-			for (let i = 1; i < ccdKeys.length; i++ ){ 
-				if (ccdKeys[i].startsWith('initial')){
-					choicePlan = ccdKeys[i];
-					break
-				}
-			};
+		const monthlyData = await JSON.parse(doc.getElementById("webpack-monthly-product-data").innerText).contentChoiceOptions;
+		let choicePlan = "initial";
+		if (monthlyData.contentChoiceData["initial-get-all-games"]) {
+			choicePlan = "initial-get-all-games";
 		}
-		let choiceData = monthlyData.contentChoiceData[choicePlan].content_choices;
+
+		const choiceData = monthlyData.contentChoiceData[choicePlan].content_choices; // all choices for that month
 		
 		if (monthlyData.hasOwnProperty("contentChoicesMade")) {
-			let choicesMade = monthlyData.contentChoicesMade[choicePlan].choices_made;
+			const choicesMade = monthlyData.contentChoicesMade[choicePlan].choices_made;
 			
 			for (let i = 0; i < choicesMade.length; i++){
 				if(choiceData.hasOwnProperty(choicesMade[i])){
@@ -89,17 +83,15 @@ async function fetchMonthlies(urls,strGames,monthlyInfo) {
 			};
 		}
 		
-		strGames += monthlyInfo[loopInt] + "\n";
-		let choiceKeys = Object.keys(choiceData);
+		strGames += "  \n";
+		strGames += monthlyInfo[index] + "\n";
+		const choiceKeys = Object.keys(choiceData);
 
 		for (let i = 0; i < choiceKeys.length; i++){
-			let curKey = choiceKeys[i];
-			strGames += choiceData[curKey].title + "\n";
+			const curKey = choiceKeys[i];
+			strGames += choiceData[curKey].title + "  \n";
 		};
-		
-		loopInt++;
+		index++;
 	}
 	readySave(strGames);
 };
-
-
