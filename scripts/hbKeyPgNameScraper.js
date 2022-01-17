@@ -3,8 +3,8 @@ async function copyList(){
 	const elJumpTo = document.getElementsByClassName("js-jump-to-page jump-to-page");
 	let intLastPage = elJumpTo.length-2;
 	let intPageCount = 1;
-	let monthlies = [];
-	let monthlyInfo = []; 
+	const monthlies = [];
+	const monthlyInfo = []; 
 	const opts = await getExtOptions( {fetchChoices: true} );
 	
 
@@ -19,9 +19,9 @@ async function copyList(){
 	}
 	
 	for (let j = 0; j< intPageCount;j++){
-		let elH4 = document.querySelectorAll("h4");
-		let elChoiceUrls = document.getElementsByClassName("choice-button");
-		let descriptions = document.getElementsByClassName("game-name");
+		const elH4 = document.querySelectorAll("h4");
+		const elChoiceUrls = document.getElementsByClassName("choice-button");
+		const descriptions = document.getElementsByClassName("game-name");
 		if (elChoiceUrls.length > 0 && opts.fetchChoices !== false){
 			for (let i = 0; i < elChoiceUrls.length; i++){
 				monthlies.push(elChoiceUrls[i].href);
@@ -30,13 +30,12 @@ async function copyList(){
 		for (let i = 0; i < elH4.length; i++){
 			if(elH4[i].innerHTML.endsWith("Humble Choice")){ 
 				if (opts.fetchChoices !== false) {
-					let tempInfo = descriptions[i+1].innerText.split("\n",2);
+					const tempInfo = descriptions[i+1].innerText.split("\n",2);
 					tempInfo[1] = tempInfo[1].slice(9);
-					tempInfo = tempInfo[0] + "\n" + tempInfo[1];
-					monthlyInfo.push(tempInfo);
+					monthlyInfo.push(`${tempInfo[0]}  \n${tempInfo[1]}`);
 				}
 			} else {
-			    strGames += elH4[i].innerHTML + "  \n";
+			    strGames += `${elH4[i].innerHTML}  \n`;
 			}
 		};
 		if (j < intPageCount -1){
@@ -83,13 +82,12 @@ async function fetchMonthlies(urls,strGames,monthlyInfo) {
 			};
 		}
 		
-		strGames += "  \n";
-		strGames += monthlyInfo[index] + "\n";
+		strGames += `  \n${monthlyInfo[index]}  \n`;
 		const choiceKeys = Object.keys(choiceData);
 
 		for (let i = 0; i < choiceKeys.length; i++){
 			const curKey = choiceKeys[i];
-			strGames += choiceData[curKey].title + "  \n";
+			strGames += `${choiceData[curKey].title}  \n`;
 		};
 		index++;
 	}
