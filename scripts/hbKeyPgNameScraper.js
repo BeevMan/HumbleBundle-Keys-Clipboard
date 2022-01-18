@@ -5,8 +5,15 @@ async function copyList(){
 	let intPageCount = 1;
 	const monthlies = [];
 	const monthlyInfo = []; 
-	const opts = await getExtOptions( {fetchChoices: true} );
-	
+	const opts = await getExtOptions( {
+		fetchChoices: true,
+		b4Name: '',
+		aftName: '',
+		b4Monthly: '',
+		aftMonthly: '',
+		b4Rem: '',
+		aftRem: ''
+	} );
 
 	if(intLastPage > 0){ 
 		if (elJumpTo[elJumpTo.length-1].innerText !== ""){ 
@@ -31,11 +38,11 @@ async function copyList(){
 			if(elH4[i].innerHTML.endsWith("Humble Choice")){ 
 				if (opts.fetchChoices !== false) {
 					const tempInfo = descriptions[i+1].innerText.split("\n",2);
-					tempInfo[1] = tempInfo[1].slice(9);
-					monthlyInfo.push(`${tempInfo[0]}\n${tempInfo[1]}`);
+					tempInfo[1] = tempInfo[1].slice(9, -1);
+					monthlyInfo.push(`${opts.b4Monthly}${tempInfo[0]}${opts.aftMonthly}\n${opts.b4Rem}${tempInfo[1]}${opts.aftRem}`);
 				}
 			} else {
-			    strGames += `${elH4[i].innerHTML}\n`;
+			    strGames += `${opts.b4Name}${elH4[i].innerHTML}${opts.aftName}\n`;
 			}
 		};
 		if (j < intPageCount -1){
@@ -58,6 +65,8 @@ async function fetchMonthlies(urls,strGames,monthlyInfo) {
 		return response.text();
 	});
   
+	const opts = await getExtOptions( {b4Choice: '', aftChoice: ''} );
+
 	let index = 0;
 	for(const promise of promises) {
 		const parser = new DOMParser();
@@ -87,7 +96,7 @@ async function fetchMonthlies(urls,strGames,monthlyInfo) {
 
 		for (let i = 0; i < choiceKeys.length; i++){
 			const curKey = choiceKeys[i];
-			strGames += `${choiceData[curKey].title}\n`;
+			strGames += `${opts.b4Choice}${choiceData[curKey].title}${opts.aftChoice}\n`;
 		};
 		index++;
 	}

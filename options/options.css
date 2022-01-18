@@ -1,0 +1,10 @@
+.nameMod {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+}
+
+.nameMod label {
+    margin: 3px
+}

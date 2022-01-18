@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head><title>HumbleBundle Keys Clipboard Options</title></head>
+<head>
+  <title>HumbleBundle Keys Clipboard Options</title>
+  <link href="options.css" rel="stylesheet">
+</head>
 <body>
 
 <h3 class = "scraperOnly">Keys & Entitlements page scraper enabled</h3>
@@ -41,12 +44,48 @@
   </span>
 </div>
 
-<h4>
+<div class="scraperOnly">
+  <h4>Modify names</h6>
+
+  <div class="nameMod">
+    <label for="b4Name">Before:</label>
+    <input type="text" name="b4Name" id="b4Name" size="1">
+    <p>Games Name</p>
+    <input type="text" name="aftName" id="aftName" size="1">
+    <label for="aftName"><-After</label>
+  </div>
+
+  <div class="nameMod">
+    <label for="b4Monthly">Before:</label>
+    <input type="text" name="b4Monthly" id="b4Monthly" size="1">
+    <p>Monthly Name</p>
+    <input type="text" name="aftMonthly" id="aftMonthly" size="1">
+    <label for="aftMonthly"><-After</label>
+  </div>
+
+  <div class="nameMod">
+    <label for="b4Rem">Before:</label>
+    <input type="text" name="b4Rem" id="b4Rem" size="1">
+    <p>Choices Remaining</p>
+    <input type="text" name="aftRem" id="aftRem" size="1">
+    <label for="aftRem"><-After</label>
+  </div>
+
+  <div class="nameMod">
+    <label for="b4Choice">Before:</label>
+    <input type="text" name="b4Choice" id="b4Choice" size="1">
+    <p>Choice Name</p>
+    <input type="text" name="aftChoice" id="aftChoice" size="1">
+    <label for="aftChoice"><-After</label>
+  </div>
+</div>
+
+<h3>
   <label>
     <input type = "checkbox" id = "APIenable">
-	API call. (retrieves more data of your purchases)
+	  API call. (retrieves more data of your purchases)
   </label>
-</h4>
+</h3>
 
 <div class="apiOnly" id="apiFilters">
   <h4>API data filters</h4>

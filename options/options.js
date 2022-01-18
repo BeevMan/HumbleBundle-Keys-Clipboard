@@ -16,7 +16,7 @@ function hideOrDisplayOpts(){
 	const isApiEnabled = document.getElementById('APIenable').checked;
 	const getAll = document.getElementById('allApiData'); // if getAll.checked is true, apiFilters should be hidden
 	const apiOnly = document.getElementsByClassName('apiOnly'); // only to be shown when isApiEnabled is true
-	const scraperOnly = document.getElementsByClassName("scraperOnly"); 
+	const scraperOnly = document.getElementsByClassName("scraperOnly");
 	if (isApiEnabled){
 		Object.keys(apiOnly).forEach(key => apiOnly[key].removeAttribute("hidden"));
 		Object.keys(scraperOnly).forEach(key => scraperOnly[key].setAttribute("hidden", true));
@@ -84,6 +84,14 @@ const defOptions = {
 	fileName: 'hbKeysClipboard',
 	iconButton: true,
 	fetchChoices: true,
+	b4Name: '',
+	aftName: '',
+	b4Monthly: '',
+	aftMonthly: '',
+	b4Rem: '',
+	aftRem: '',
+	b4Choice: '',
+	aftChoice: '',
 	allApiData: false,
 	storefront: true,
 	bundle: true,

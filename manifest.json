@@ -29,9 +29,9 @@
   "web_accessible_resources": ["icons/32-clipboard.png"],
   "icons": {
     "128": "icons/128-clipboard.png",
-	"48": "icons/48-clipboard.png",
-	"32": "icons/32-clipboard.png",
-	"16": "icons/16-clipboard.png"
+    "48": "icons/48-clipboard.png",
+    "32": "icons/32-clipboard.png",
+    "16": "icons/16-clipboard.png"
 	},
   "browser_specific_settings": { 
 	"gecko": {
