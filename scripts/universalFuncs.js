@@ -55,8 +55,8 @@ function getExtOptions(key) {
 		if (chrome.runtime){
 			icon = chrome.runtime.getURL('icons/32-clipboard.png');
 		} else {
-			icon = "moz-extension://<extension-UUID>/32-clipboard.png";
-		};
+			icon = browser.runtime.getURL("icons/32-clipboard.png");
+		}
 	}
 	const btn = document.createElement("label");
 	if (icon === undefined) {

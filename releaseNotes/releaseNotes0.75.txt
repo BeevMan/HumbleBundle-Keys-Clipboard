@@ -1,0 +1,13 @@
+RELEASE NOTES v0.75  
+  
+When doing a filtered API call scraping data from choices is now possible.  
+  Check/enable "Extra Choice data" in options.  
+  It will fetch the Choice data then filter and return  
+    maxChoices: how many choices you purchased that month,  
+    choicesUsed: amount of choices used for that month,  
+    unMadeChoices: unchosen choice games  
+  
+Keys & Entitlements page scraper, now has options to insert characters before & after the gathered names.  
+  This can be useful for adding formatting to your list without the need for an external editor.  
+
+Refactored some code to hopefully make it easier to read for my future self or any contributors.

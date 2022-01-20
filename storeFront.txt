@@ -1,0 +1,33 @@
+Quickly copy a list of your Humble Bundle entitlements, save all your Humble Bundle data or filter it!
+
+While viewing your Humble Bundle keys & entitlements page, 
+simply click the button and wait for your file to save or for an alert letting you know that it has copied to your clipboard!
+
+
+Example of list gathered via scraper: (Humble Choice's optional)
+"
+Train Valley 2
+MotoGP 15
+Chasm
+Fluffy Horde
+
+JANUARY 2020 HUMBLE CHOICE
+5 choices remaining
+GRIP + 1 DLC
+Middle-earth™: Shadow of War™
+Two Point Hospital
+Street Fighter V
+Whispers of a Machine
+Mages of Mystralia
+Unrailed!
+"
+
+The API call option can gather more information.
+This information can contain: keys, download links, steam app ID, expiration, country restrictions and more!
+
+
+Suggestions? Comments? or ???  
+
+Please feel free to reach out I would love to hear some feedback.  
+Discord: https://discord.gg/tgP8Mqh  
+or via contact on store page.

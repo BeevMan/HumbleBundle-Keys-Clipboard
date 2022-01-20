@@ -1,7 +1,7 @@
 {
   "name": "HumbleBundle Keys Clipboard",
-  "version": "0.74",
-  "description": "Quickly copy or save a list of your Humble Bundle entitlements & keys",
+  "version": "0.75",
+  "description": "Save your Humble Bundle entitlements & keys data",
 	"manifest_version": 2,
 	"content_security_policy": "default-src 'self'",
   "content_scripts": [
@@ -34,9 +34,8 @@
     "16": "icons/16-clipboard.png"
 	},
   "browser_specific_settings": { 
-	"gecko": {
-	  "id": "{94df1f6d-b104-4223-9563-d5514b15a3f3}"
-	}
+    "gecko": {
+      "id": "{94df1f6d-b104-4223-9563-d5514b15a3f3}"
+    }
   }
-
 }

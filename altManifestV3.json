@@ -1,0 +1,46 @@
+{
+  "name": "HumbleBundle Keys Clipboard",
+  "version": "0.75",
+  "description": "Save your Humble Bundle entitlements & keys data",
+	"manifest_version": 3,
+	"content_security_policy": {"extension_pages": "script-src 'self'; object-src 'self'"},
+  "content_scripts": [
+   {
+     "matches": ["https://www.humblebundle.com/home/keys*"],
+		 "run_at": "document_idle",
+     "js": [
+			 "scripts/hbKeyPgNameScraper.js",
+			 "scripts/FileSaver.js",
+			 "scripts/universalFuncs.js",
+			 "scripts/APIscript.js"
+		 ]
+   }
+  ],
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": false
+  },
+  "permissions": [
+	  "storage"
+	],
+  "optional_permissions": [
+	  "clipboardWrite"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [ "icons/32-clipboard.png" ],
+      "matches": [ "https://www.humblebundle.com/*" ]
+    }
+  ],
+  "icons": {
+    "128": "icons/128-clipboard.png",
+    "48": "icons/48-clipboard.png",
+    "32": "icons/32-clipboard.png",
+    "16": "icons/16-clipboard.png"
+	},
+  "browser_specific_settings": { 
+    "gecko": {
+      "id": "{94df1f6d-b104-4223-9563-d5514b15a3f3}"
+      }
+  }
+}
