@@ -1,6 +1,6 @@
 {
   "name": "HumbleBundle Keys Clipboard",
-  "version": "0.75",
+  "version": "0.76",
   "description": "Save your Humble Bundle entitlements & keys data",
 	"manifest_version": 2,
 	"content_security_policy": "default-src 'self'",

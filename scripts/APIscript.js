@@ -64,6 +64,11 @@ async function filterApiData(toFilter, options){
 			}
 			if(options.addlChoice && filterMe.product.choice_url ) {
 				await handleChoiceData(bundle, filterMe.product.choice_url, options);
+				if (!bundle.unRedeemed) {
+					if ( bundle.choicesLeft <= 0 && !options.redeemed) {
+						bundle = {};
+					}
+				}
 			}
 			
 			if(options.direct || options.torrent){
@@ -144,52 +149,54 @@ async function handleChoiceData (bundle, choice_url, options) {
 
 	const monthlyData = await JSON.parse(doc.getElementById("webpack-monthly-product-data").innerText).contentChoiceOptions;
 
-	bundle.maxChoices = monthlyData.MAX_CHOICES; // amount of choices available according to purchase plan???  Does not go past 10? even if they let you redeem all 12 games that month.
-
-
 	let initPath = "initial";
 	if (monthlyData.contentChoiceData["initial-get-all-games"]) {
 		initPath = "initial-get-all-games";
-		bundle.maxChoices = Object.keys(monthlyData.contentChoiceData[initPath].content_choices).length
 	}
+
+	bundle.startingChoices = monthlyData.contentChoiceData[initPath].total_choices; // amount of choices available according to purchase plan???
 
 	let choicesMade = [];
 	if (monthlyData.contentChoicesMade) {
 		choicesMade = monthlyData.contentChoicesMade[initPath].choices_made; // array of machine names of game/s that have been redeemed by using choices
 		bundle.choicesUsed = choicesMade.length;
+		bundle.choicesLeft = (bundle.startingChoices - bundle.choicesUsed) || 0;
 		// The object that "choice_url" comes from also contains "choices_remaining", which could be used to output said data.
 	} else {
 		bundle.choicesUsed = 0;
+		bundle.choicesLeft = bundle.startingChoices;
 	}
 
-	const allChoices =  monthlyData.contentChoiceData[initPath].content_choices; // all choices for that month
-	const choicesLeft = [];
-	for (const choice in allChoices ) {
-		if (!choicesMade.includes(choice)) {
-			choicesLeft.push(allChoices[choice])
-		}
-	}
-
-	let choices = {};
-	choicesLeft.map( (choice) => {
-		choices[choice.title] = {};
-
-		let choiceTpkds = [];
-		if (choice.tpkds) {
-			choiceTpkds = choice.tpkds[0];
-		} else {
-			if (choice.nested_choice_tpkds) {
-				if (choice.nested_choice_tpkds[`${choice.display_item_machine_name}_steam`]){
-					choiceTpkds = choice.nested_choice_tpkds[`${choice.display_item_machine_name}_steam`][0];
-				}
+	if (options.unRedeemed && bundle.choicesLeft >= 1 || options.redeemed) { // prevents adding unMadeChoices to bundles when necessary
+		const allChoices =  monthlyData.contentChoiceData[initPath].content_choices; // all choices for that month
+		const choicesLeft = [];
+		for (const choice in allChoices ) {
+			if (!choicesMade.includes(choice)) {
+				choicesLeft.push(allChoices[choice])
 			}
 		}
 
-		addAppID( choices[choice.title], choiceTpkds, options );
-		addRestrictions( choices[choice.title], choiceTpkds, options );
-	});
-	
-	bundle.unMadeChoices = choices;
+		let choices = {};
+		choicesLeft.map( (choice) => {
+			choices[choice.title] = {};
+
+			let choiceTpkds = [];
+			if (choice.tpkds) {
+				choiceTpkds = choice.tpkds[0];
+			} else {
+				if (choice.nested_choice_tpkds) {
+					if (choice.nested_choice_tpkds[`${choice.display_item_machine_name}_steam`]){
+						choiceTpkds = choice.nested_choice_tpkds[`${choice.display_item_machine_name}_steam`][0];
+					}
+				}
+			}
+
+			addAppID( choices[choice.title], choiceTpkds, options );
+			addRestrictions( choices[choice.title], choiceTpkds, options );
+		});
+		
+		bundle.unMadeChoices = choices;
+	}
 }
 
 
