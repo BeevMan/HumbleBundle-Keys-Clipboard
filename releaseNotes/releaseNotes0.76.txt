@@ -1,4 +1,7 @@
 RELEASE NOTES v0.76  
 
 Extra Choice data will no longer return bundle data when all choices are used/ there are no unredeemed titles in the bundle and 
-redeemed keys options is unchecked.
+redeemed keys options is unchecked.  
+  
+Extra Choice data wasn't returning the correct amount of starting choices in some monthlies that provided all choices.  
+  - Should now be correct for all monthly choice bundles.
