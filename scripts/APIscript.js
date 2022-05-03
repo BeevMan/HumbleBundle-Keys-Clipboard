@@ -154,7 +154,13 @@ async function handleChoiceData (bundle, choice_url, options) {
 		initPath = "initial-get-all-games";
 	}
 
-	bundle.startingChoices = monthlyData.contentChoiceData[initPath].total_choices; // amount of choices available according to purchase plan???
+	if (monthlyData.usesChoices) {
+		bundle.startingChoices = monthlyData.contentChoiceData[initPath].total_choices; // amount of choices available according to purchase plan???
+	} else {
+		console.log(choice_url, monthlyData);
+		filterChoiceless(bundle, monthlyData, options); // COULD JUST BE FOR CURRENTMONTHLY??? MAYBE IT'S A NEW FORMAT???
+		return
+	}
 
 	let choicesMade = [];
 	if (monthlyData.contentChoicesMade) {
@@ -169,6 +175,60 @@ async function handleChoiceData (bundle, choice_url, options) {
 
 	if (options.unRedeemed && bundle.choicesLeft >= 1 || options.redeemed) { // prevents adding unMadeChoices to bundles when necessary
 		const allChoices =  monthlyData.contentChoiceData[initPath].content_choices; // all choices for that month
+		const choicesLeft = [];
+		for (const choice in allChoices ) {
+			if (!choicesMade.includes(choice)) {
+				choicesLeft.push(allChoices[choice])
+			}
+		}
+
+		let choices = {};
+		choicesLeft.map( (choice) => {
+			choices[choice.title] = {};
+
+			let choiceTpkds = [];
+			if (choice.tpkds) {
+				choiceTpkds = choice.tpkds[0];
+			} else {
+				if (choice.nested_choice_tpkds) {
+					if (choice.nested_choice_tpkds[`${choice.display_item_machine_name}_steam`]){
+						choiceTpkds = choice.nested_choice_tpkds[`${choice.display_item_machine_name}_steam`][0];
+					}
+				}
+			}
+
+			addAppID( choices[choice.title], choiceTpkds, options );
+			addRestrictions( choices[choice.title], choiceTpkds, options );
+		});
+		
+		bundle.unMadeChoices = choices;
+	}
+}
+
+
+function filterChoiceless( bundle, monthlyData, options ) {
+
+	let initPath = "initial";
+	if (monthlyData.contentChoicesMade["initial-get-all-games"]) {
+		initPath = "initial-get-all-games";
+	} else if (!monthlyData.contentChoicesMade["initial"]) {
+		console.log("choiceLess initPath has changed, review for changes.");
+	}
+
+	if (monthlyData.contentChoiceData["initial-get-all-games"]) {
+		console.log("choiceLess filtering initpath now like the other monthly choices")
+	} else if (monthlyData.contentChoiceData["initial"]) {
+		console.log("choiceLess filtering initpath now like the other monthly choices");
+	}
+
+
+	let choicesMade = [];
+	if (monthlyData.contentChoicesMade) {
+		choicesMade = monthlyData.contentChoicesMade[initPath].choices_made; // array of machine names of game/s that have been redeemed
+	}
+
+	if (options.unRedeemed || options.redeemed) { // prevents adding unMadeChoices to bundles when necessary
+		const allChoices =  monthlyData.contentChoiceData.game_data; // all choices for that month
 		const choicesLeft = [];
 		for (const choice in allChoices ) {
 			if (!choicesMade.includes(choice)) {

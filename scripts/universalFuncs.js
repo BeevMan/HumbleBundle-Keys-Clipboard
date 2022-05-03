@@ -46,7 +46,7 @@ function getExtOptions(key) {
 };
 
 
-(async function (){ // function addButton
+(async function (){ // function addButtons
 	const options = await getExtOptions( {iconButton: true, APIenable: false} );
 	const buttOpt = options.iconButton ?? true;
 	let icon;
@@ -71,10 +71,25 @@ function getExtOptions(key) {
 		inpt.alt = "List to clipboard."
 		btn.appendChild(inpt);
 	}
+
 	if (options.APIenable === true){
 		btn.addEventListener("click", apiCall);
 	} else {
 	    btn.addEventListener("click", copyList);
 	}
 	document.getElementsByClassName("sort")[0].appendChild(btn);
+
+	const optButton = document.createElement("button");
+		optButton.type = "button";
+		optButton.innerText = "clipboard options";
+		optButton.addEventListener('click', function() {
+			if (chrome.runtime.openOptionsPage) {
+				chrome.runtime.openOptionsPage();
+			} else if (chrome.runtime) {
+			window.open(chrome.runtime.getURL('options/options.html'));
+			} else {
+				browser.runtime.getURL('options/options.html');
+			}
+		});
+		document.getElementsByClassName("sort")[0].appendChild(optButton);
 })();

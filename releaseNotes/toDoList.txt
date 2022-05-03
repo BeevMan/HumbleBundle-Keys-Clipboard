@@ -1,0 +1,13 @@
+Manifest version 2 is deprecated in Chrome, and support will be removed in 2023. See https://developer.chrome.com/blog/mv2-transition/ for more details.
+    will have to look into what changes will need to be made
+        I made a manifestV3 already, does not appear that FireFox supports it yet.
+            I still need to check that everything works in chrome with it, as I don't remember
+            just rename||delete??? opposing file before uploading?
+
+Make a new icon to link to options while on entitlements page
+    Clipboard icon with a gear on it?
+    Link to FireFox options https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Options_pages
+    Link to Chrome options https://developer.chrome.com/docs/extensions/reference/runtime/#method-openOptionsPage
+        https://stackoverflow.com/questions/22946346/how-do-you-open-chrome-extension-options-page-from-a-web-page
+
+Add delivery methods to the options for API call

@@ -8,3 +8,9 @@
 .nameMod label {
     margin: 3px
 }
+
+html {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

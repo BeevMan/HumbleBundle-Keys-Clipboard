@@ -18,7 +18,7 @@
   ],
   "options_ui": {
     "page": "options/options.html",
-    "open_in_tab": false
+    "open_in_tab": true
   },
   "permissions": [
 	  "storage"
@@ -26,7 +26,7 @@
   "optional_permissions": [
 	  "clipboardWrite"
   ],
-  "web_accessible_resources": ["icons/32-clipboard.png"],
+  "web_accessible_resources": ["icons/32-clipboard.png", "options/options.html"],
   "icons": {
     "128": "icons/128-clipboard.png",
     "48": "icons/48-clipboard.png",
