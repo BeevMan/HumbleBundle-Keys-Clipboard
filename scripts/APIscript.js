@@ -284,6 +284,7 @@ function filterChoiceless( bundle, monthlyData, options ) {
 		});
 		
 		bundle.unMadeChoices = choices;
+		bundle.isChoiceLess = true;
 	}
 }
 
