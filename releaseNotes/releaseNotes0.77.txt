@@ -1,2 +1,21 @@
 Added support for "choice less" monthlies
     sorry if the format has been like this for awhile, I just noticed/haven't subbed for some time
+    please contact me if you notice any further issues with it
+
+Some users reported that the scraper didn't work while fetching monthlies
+    I put in a work around
+        should now log the urls that were throwing errors previously
+        then continue on with the rest as usual
+    Please let me know via discord, gmail/contact email, or github if you notice any of these logged in your console
+        or if you notice anything else that seems off or that could be improved!!!
+
+Added a button that links to the extensions options
+    pushed the update sooner than I would have liked, due to the previous two notes
+        the styling is ugly on the button, I'm sorry.
+
+Added two options for the API call
+    delivery_methods
+    genres
+    they are only available on choice/monthlies from what i've seen.
+        I may add key_type_human_name as an option in the future.  It's similar to delivery_methods but in previous bundles and or non choice?
+        I will probably add delivery_methods && genres into the addlChoice option in the future.  Since they're only found in Choice.

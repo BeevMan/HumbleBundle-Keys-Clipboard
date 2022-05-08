@@ -59,7 +59,7 @@ async function copyList(){
 
 
 async function fetchMonthlies(urls,strGames,monthlyInfo) {
-
+	
 	const promises = urls.map(async url => {
 		const response = await fetch(url);
 		return response.text();
@@ -71,18 +71,33 @@ async function fetchMonthlies(urls,strGames,monthlyInfo) {
 	for(const promise of promises) {
 		const parser = new DOMParser();
 		const doc = parser.parseFromString(await promise, 'text/html');
+
+		const elWebpack = doc.getElementById("webpack-monthly-product-data");
 		
-		
-		const monthlyData = await JSON.parse(doc.getElementById("webpack-monthly-product-data").innerText).contentChoiceOptions;
+		let monthlyData;
+
+		if (elWebpack && elWebpack.innerText && elWebpack.innerText.includes('contentChoiceOptions') ) { // two people have mentioned an error / innerText not there 
+			monthlyData = await JSON.parse(elWebpack.innerText).contentChoiceOptions;
+		} else {
+			console.log(urls[index]); // should display urls/bundles that are causing issues / no innerText
+			index++
+			continue // end this loop iteration, data not there / innerText not found
+		}
+
 		let choicePlan = "initial";
 		if (monthlyData.contentChoiceData["initial-get-all-games"]) {
 			choicePlan = "initial-get-all-games";
 		}
 
-		const choiceData = monthlyData.contentChoiceData[choicePlan].content_choices; // all choices for that month
+		let choiceData;
+		if (monthlyData.usesChoices) {
+			choiceData = monthlyData.contentChoiceData[choicePlan].content_choices; // all choices for that month
+		} else {
+			choiceData = monthlyData.contentChoiceData.game_data; // alternative place for data, to cover "choiceLess" choice/monthly
+		}
 		
 		if (monthlyData.hasOwnProperty("contentChoicesMade")) {
-			const choicesMade = monthlyData.contentChoicesMade[choicePlan].choices_made;
+			const choicesMade = monthlyData.contentChoicesMade[choicePlan].choices_made; // array of machine names of game/s that have been redeemed
 			
 			for (let i = 0; i < choicesMade.length; i++){
 				if(choiceData.hasOwnProperty(choicesMade[i])){

@@ -103,6 +103,8 @@ const defOptions = {
 	redeemed: false,
 	appID: false,
 	restrictions: false,
+	deliveryMethods: false,
+	genres: false,
 	addlChoice: false,
 	sort: 'noSort',
 };

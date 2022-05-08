@@ -15,7 +15,7 @@ async function apiCall() {
 		// WILL NEED TO ADD A FUNCTION, IT WILL CONVERT FROM JSON TO AN APPLICABLE FORMAT IF SAVING !== ".json" || "clipboard"
 		readySave(JSON.stringify(data, null, 2));
 	} else {
-			filterApiData(data, opts);
+		filterApiData(data, opts);
 	}
 };
 
@@ -33,6 +33,8 @@ const apiOptions = {
 	redeemed: false,
 	appID: false,
 	restrictions: false,
+	deliveryMethods: false,
+	genres: false,
 	addlChoice: false,
 	sort: 'noSort',
 };
@@ -138,6 +140,20 @@ function addRestrictions (gamesObj, curTPKS, options) {
 }
 
 
+function addDeliveryMethods (gamesObj, choice, options) {
+	if(options.deliveryMethods && choice.delivery_methods !== null){
+		gamesObj.delivery_methods = choice.delivery_methods;
+	}
+}
+
+
+function addGenres (gamesObj, choice, options) {
+	if(options.genres && choice.genres !== null){
+		gamesObj.genres = choice.genres;
+	}
+}
+
+
 async function handleChoiceData (bundle, choice_url, options) {
 
 	const url = `https://www.humblebundle.com/subscription/${choice_url}`;
@@ -147,7 +163,16 @@ async function handleChoiceData (bundle, choice_url, options) {
 	const parser = new DOMParser();
 	const doc = parser.parseFromString( textPromise, 'text/html');
 
-	const monthlyData = await JSON.parse(doc.getElementById("webpack-monthly-product-data").innerText).contentChoiceOptions;
+	const elWebpack = doc.getElementById("webpack-monthly-product-data");
+		
+	let monthlyData;
+
+	if (elWebpack && elWebpack.innerText && elWebpack.innerText.includes('contentChoiceOptions') ) { // two people have mentioned an error / innerText not there 
+		monthlyData = await JSON.parse(elWebpack.innerText).contentChoiceOptions;
+	} else {
+		console.log(url); // should display urls/bundles that are causing issues / no innerText
+		return // end this loop iteration, data not there / innerText not found
+	}
 
 	let initPath = "initial";
 	if (monthlyData.contentChoiceData["initial-get-all-games"]) {
@@ -157,7 +182,6 @@ async function handleChoiceData (bundle, choice_url, options) {
 	if (monthlyData.usesChoices) {
 		bundle.startingChoices = monthlyData.contentChoiceData[initPath].total_choices; // amount of choices available according to purchase plan???
 	} else {
-		console.log(choice_url, monthlyData);
 		filterChoiceless(bundle, monthlyData, options); // COULD JUST BE FOR CURRENTMONTHLY??? MAYBE IT'S A NEW FORMAT???
 		return
 	}
@@ -199,6 +223,8 @@ async function handleChoiceData (bundle, choice_url, options) {
 
 			addAppID( choices[choice.title], choiceTpkds, options );
 			addRestrictions( choices[choice.title], choiceTpkds, options );
+			addDeliveryMethods( choices[choice.title], choice, options );
+			addGenres( choices[choice.title], choice, options );
 		});
 		
 		bundle.unMadeChoices = choices;
@@ -253,6 +279,8 @@ function filterChoiceless( bundle, monthlyData, options ) {
 
 			addAppID( choices[choice.title], choiceTpkds, options );
 			addRestrictions( choices[choice.title], choiceTpkds, options );
+			addDeliveryMethods( choices[choice.title], choice, options );
+			addGenres( choices[choice.title], choice, options );
 		});
 		
 		bundle.unMadeChoices = choices;

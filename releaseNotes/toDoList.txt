@@ -10,4 +10,26 @@ Make a new icon to link to options while on entitlements page
     Link to Chrome options https://developer.chrome.com/docs/extensions/reference/runtime/#method-openOptionsPage
         https://stackoverflow.com/questions/22946346/how-do-you-open-chrome-extension-options-page-from-a-web-page
 
-Add delivery methods to the options for API call
+Add options for API call
+    delivery_methods
+    genres
+    THEY ARE ONLY AVAILABLE ON CHOICE/MONTHLIES ???
+        add key_type_human_name as an option? or in combination with delivery_methods???
+        combine delivery_methods && genres into the addlChoice option???
+
+Remove txt file saving option when API call is active (since the text file is still in JSON format....)
+
+I've had two reports of the scraper not working when fetching monthlies
+    API call option worked for both people while scraper had the issue
+        the scraper's url = "https://www.humblebundle.com/membership/september-2021"
+            or whatever is in the href of the choice button elements 
+        the api call's url = `https://www.humblebundle.com/subscription/${choice_url}`
+    Error from both was
+        Uncaught (in promise) TypeError: Cannot read properties of null (reading 'innerText')
+        at fetchMonthlies (hbKeyPgNameScraper.js:76:90)
+        fetchMonthlies @ hbKeyPgNameScraper.js:76
+    I have a patch in place to get past the Error / continue past problem bundles
+        it should now console.log() whichever bundles don't have: 
+            id of "webpack-monthly-product-data" 
+            || are missing .innerText 
+            || are missing contentChoiceOptions inside of .innerText 
