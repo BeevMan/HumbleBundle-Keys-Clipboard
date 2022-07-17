@@ -10,6 +10,10 @@ Make a new icon to link to options while on entitlements page
     Link to Chrome options https://developer.chrome.com/docs/extensions/reference/runtime/#method-openOptionsPage
         https://stackoverflow.com/questions/22946346/how-do-you-open-chrome-extension-options-page-from-a-web-page
 
+Add some type of progress indicator or still working type of symbol
+    It can take some time to scrape and filter / api call and filter
+        some type of in progress notification would be nice to have
+
 Add options for API call
     delivery_methods
     genres
@@ -33,3 +37,5 @@ I've had two reports of the scraper not working when fetching monthlies
             id of "webpack-monthly-product-data" 
             || are missing .innerText 
             || are missing contentChoiceOptions inside of .innerText 
+    v0.77 has a hotfix in place, it was catching up on games that gave the choice between key redemptions
+        I need to make it save those game names even when fetch monthlies is not enabled in the options

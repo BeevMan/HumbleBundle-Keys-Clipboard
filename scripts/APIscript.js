@@ -170,7 +170,7 @@ async function handleChoiceData (bundle, choice_url, options) {
 	if (elWebpack && elWebpack.innerText && elWebpack.innerText.includes('contentChoiceOptions') ) { // two people have mentioned an error / innerText not there 
 		monthlyData = await JSON.parse(elWebpack.innerText).contentChoiceOptions;
 	} else {
-		console.log(url); // should display urls/bundles that are causing issues / no innerText
+		console.log(url, 'did not correctly fetch'); // should display urls/bundles that are causing issues / no innerText
 		return // end this loop iteration, data not there / innerText not found
 	}
 
