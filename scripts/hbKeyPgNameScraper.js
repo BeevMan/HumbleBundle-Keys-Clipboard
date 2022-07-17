@@ -42,9 +42,13 @@ async function copyList(){
 			if(elH4[i].parentElement.parentElement.className == 'key-manager-choice-row'){   // current check should be more widely accepted across different regions? old one was probably only working for english speaking regions? elH4[i].innerHTML.endsWith("Humble Choice")
 				if (opts.fetchChoices !== false) {
 					const tempInfo = descriptions[i+1].innerText.split("\n",2);
-					if (tempInfo[1]) { // tempInfo[1] should contain	x "choices remaining."
-						tempInfo[1] = tempInfo[1].slice(9, -1);
-						monthlyInfo.push(`${opts.b4Monthly}${tempInfo[0]}${opts.aftMonthly}\n${opts.b4Rem}${tempInfo[1]}${opts.aftRem}`);
+					if (tempInfo[1]) {
+						if (tempInfo[1].includes("choices remaining")) {
+							tempInfo[1] = tempInfo[1].slice(9, -1);
+							monthlyInfo.push(`${opts.b4Monthly}${tempInfo[0]}${opts.aftMonthly}\n${opts.b4Rem}${tempInfo[1]}${opts.aftRem}`);
+						} else {
+							console.log("Unexpected data! (monthly description?)\nPlease contact the developer.");
+						}
 					} else {
 						monthlyInfo.push(`${opts.b4Monthly}${tempInfo[0]}${opts.aftMonthly}`);
 					}
