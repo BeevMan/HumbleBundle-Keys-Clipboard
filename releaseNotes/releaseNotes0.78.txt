@@ -1,0 +1,3 @@
+Scraper hotfix
+    Some monthly choices no longer list remaining choices in their description.
+        It was breaking the scraper if found and fetching.
