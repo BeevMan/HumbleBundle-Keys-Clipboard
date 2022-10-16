@@ -13,3 +13,4 @@ The permission will self remove itself when changing the option to anything but 
 ##### Other permission info.  
 [FireFox](https://support.mozilla.org/en-US/kb/permission-request-messages-firefox-extensions)   
 [Chrome](https://support.google.com/chrome_webstore/answer/186213?hl=en)  
+- The "storage" permission does not display any warnings.  It's used in this add-on to store option settings.  
