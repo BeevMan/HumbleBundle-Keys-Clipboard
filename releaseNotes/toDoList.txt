@@ -39,3 +39,9 @@ I've had two reports of the scraper not working when fetching monthlies
             || are missing contentChoiceOptions inside of .innerText 
     v0.77 has a hotfix in place, it was catching up on games that gave the choice between key redemptions
         I need to make it save those game names even when fetch monthlies is not enabled in the options
+
+    It seems HumbleBundle has changed the provided data for monthly choice bundles from the API call
+        If they don't change it back to include all the data, like unredeemed keys
+            I may be able to fetch the bundles web page and then add the data wanted from there
+                tartget them by looking if it has "choice_url" ???
+        
