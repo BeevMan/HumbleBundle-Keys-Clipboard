@@ -1,0 +1,2 @@
+Changed over to manifest V3 to get back onto the chrome store.
+    Firefox will still use manifest V2 and will not need the "update"
